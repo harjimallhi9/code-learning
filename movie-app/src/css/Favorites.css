@@ -1,0 +1,74 @@
+.favorites {
+  padding-top: 2rem;
+}
+
+.favorites h2 {
+  margin-bottom: 1rem;
+}
+.favorites {
+  padding: 2rem 3rem;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.favorites h2 {
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2.5rem;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.favorites-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  margin: 2rem auto;
+  max-width: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.favorites-empty:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.favorites-empty h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #e50914;
+  font-weight: 600;
+}
+
+.favorites-empty p {
+  color: #b3b3b3;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Animation for new favorites being added */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.movies-grid > * {
+  animation: fadeIn 0.35s ease-out forwards;
+}
+
+body {
+  background: linear-gradient(180deg, #141414, #0f0f0f);
+}
