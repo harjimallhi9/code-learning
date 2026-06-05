@@ -12,15 +12,150 @@ const io = new Server(server);
 const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, 'locations.db');
 const PUBLIC_DIR = path.join(__dirname, 'public');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'harji123';
 
 let db = null;
 let deviceCounter = 1;
 const devices = new Map();
 
 app.use(express.json());
-app.use(express.static(PUBLIC_DIR));
 
-app.get('/', (req, res) => res.redirect('/dashboard.html'));
+// Home page goes to tracker, not dashboard
+app.get('/', (req, res) => {
+  res.redirect('/tracker.html');
+});
+
+// Password-protected dashboard
+app.get('/dashboard.html', (req, res) => {
+  const password = req.query.password;
+
+  if (password !== ADMIN_PASSWORD) {
+    return res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Login</title>
+        <style>
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+              radial-gradient(circle at top left, rgba(34,197,94,.22), transparent 35%),
+              radial-gradient(circle at bottom right, rgba(59,130,246,.24), transparent 40%),
+              #020617;
+            color: #e2e8f0;
+            padding: 20px;
+          }
+
+          .card {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 24px;
+            padding: 26px;
+            box-shadow: 0 24px 80px rgba(0,0,0,.45);
+          }
+
+          .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            margin-bottom: 16px;
+            font-size: 22px;
+          }
+
+          h2 {
+            margin: 0 0 8px;
+            font-size: 24px;
+          }
+
+          p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.5;
+          }
+
+          input {
+            width: 100%;
+            padding: 13px 14px;
+            margin: 18px 0 12px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: #020617;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+          }
+
+          input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+          }
+
+          button {
+            width: 100%;
+            padding: 13px;
+            border: 0;
+            border-radius: 12px;
+            background: #22c55e;
+            color: #052e16;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+          }
+
+          .hint {
+            margin-top: 14px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <form class="card" method="GET" action="/dashboard.html">
+          <div class="logo">📍</div>
+          <h2>Admin Dashboard</h2>
+          <p>Enter your admin password to view live devices and approve tracking requests.</p>
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Admin password"
+            autofocus
+            required
+          />
+
+          <button type="submit">Open Dashboard</button>
+
+          <div class="hint">Tracker page remains public for shared users.</div>
+        </form>
+      </body>
+      </html>
+    `);
+  }
+
+  res.sendFile(path.join(PUBLIC_DIR, 'dashboard.html'));
+});
+
+// Static public files
+// tracker.html is public, dashboard.html is handled above first
+app.use(express.static(PUBLIC_DIR));
 
 function saveToDisk() {
   if (!db) return;
@@ -137,9 +272,12 @@ io.on('connection', socket => {
     device.status = 'approved';
     devices.set(deviceId, device);
 
-    io.to(device.socketId).emit('approval-updated', { deviceId, status: 'approved' });
-    emitDevices();
+    io.to(device.socketId).emit('approval-updated', {
+      deviceId,
+      status: 'approved'
+    });
 
+    emitDevices();
     console.log('Approved:', deviceId);
   });
 
@@ -150,9 +288,12 @@ io.on('connection', socket => {
     device.status = 'rejected';
     devices.set(deviceId, device);
 
-    io.to(device.socketId).emit('approval-updated', { deviceId, status: 'rejected' });
-    emitDevices();
+    io.to(device.socketId).emit('approval-updated', {
+      deviceId,
+      status: 'rejected'
+    });
 
+    emitDevices();
     console.log('Rejected:', deviceId);
   });
 
@@ -163,7 +304,11 @@ io.on('connection', socket => {
     device.label = String(label).trim();
     devices.set(deviceId, device);
 
-    io.to(device.socketId).emit('device-renamed', { deviceId, label: device.label });
+    io.to(device.socketId).emit('device-renamed', {
+      deviceId,
+      label: device.label
+    });
+
     emitDevices();
   });
 
@@ -191,7 +336,13 @@ io.on('connection', socket => {
 
     device.pings = (device.pings || 0) + 1;
     device.lastSeen = timestamp;
-    device.lastLocation = { lat, lng, accuracy, timestamp };
+    device.lastLocation = {
+      lat,
+      lng,
+      accuracy,
+      timestamp
+    };
+
     devices.set(deviceId, device);
 
     if (db) {
