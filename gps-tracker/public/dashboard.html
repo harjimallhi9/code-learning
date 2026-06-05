@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>LiveTrack Dashboard</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e2e8f0;
+      overflow: hidden;
+    }
+    .app { height: 100vh; display: grid; grid-template-columns: 380px 1fr; }
+    aside {
+      background: radial-gradient(circle at top left, rgba(59,130,246,.18), transparent 36%), #0f172a;
+      border-right: 1px solid rgba(148,163,184,.16);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    header { padding: 20px; border-bottom: 1px solid rgba(148,163,184,.14); }
+    .brand {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-bottom: 16px;
+    }
+    .brand-left { display: flex; align-items: center; gap: 11px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 16px;
+      background: linear-gradient(135deg, #22c55e, #3b82f6);
+      display: grid; place-items: center;
+    }
+    h1 { font-size: 19px; line-height: 1; }
+    .muted { color: #94a3b8; font-size: 12px; margin-top: 4px; }
+    .badge {
+      padding: 6px 10px; border-radius: 999px; font-size: 12px;
+      background: rgba(148,163,184,.10); color: #cbd5e1;
+    }
+    .badge.ok { background: rgba(34,197,94,.14); color: #86efac; }
+    input {
+      width: 100%; background: #020617;
+      border: 1px solid rgba(148,163,184,.2);
+      color: #e2e8f0; border-radius: 13px;
+      padding: 12px 13px; outline: none; font-size: 14px;
+    }
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; padding: 14px 20px;
+      border-bottom: 1px solid rgba(148,163,184,.14);
+    }
+    .stat {
+      background: rgba(2,6,23,.38);
+      border: 1px solid rgba(148,163,184,.12);
+      border-radius: 14px; padding: 12px;
+    }
+    .stat span { display: block; font-weight: 900; font-size: 18px; }
+    .stat small { color: #64748b; font-size: 11px; text-transform: uppercase; }
+    .device-list {
+      padding: 14px; overflow-y: auto;
+      display: grid; gap: 10px; align-content: start; flex: 1;
+    }
+    .device {
+      border: 1px solid rgba(148,163,184,.14);
+      background: rgba(15,23,42,.82);
+      border-radius: 18px;
+      padding: 13px;
+      cursor: pointer;
+    }
+    .device.selected {
+      border-color: rgba(34,197,94,.52);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.09);
+    }
+    .device-head {
+      display: flex; justify-content: space-between;
+      gap: 10px; align-items: start; margin-bottom: 8px;
+    }
+    .device-title { font-weight: 900; }
+    .device-id { color: #94a3b8; font-size: 12px; margin-top: 3px; }
+    .status {
+      padding: 4px 8px; border-radius: 999px; font-size: 11px;
+      font-weight: 800; text-transform: uppercase;
+    }
+    .pending { background: rgba(245,158,11,.14); color: #fde68a; }
+    .approved { background: rgba(34,197,94,.14); color: #86efac; }
+    .rejected { background: rgba(239,68,68,.14); color: #fca5a5; }
+    .device-meta {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 7px; color: #94a3b8; font-size: 12px; margin: 10px 0;
+    }
+    .actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+    button {
+      border: 0; border-radius: 11px; padding: 8px 10px;
+      font-size: 12px; font-weight: 800; cursor: pointer; color: white;
+    }
+    .approve { background: #16a34a; }
+    .reject { background: #dc2626; }
+    .ghost { background: #334155; }
+    .blue { background: #2563eb; }
+    .map-wrap { position: relative; min-width: 0; }
+    #map { height: 100vh; width: 100%; }
+    .floating {
+      position: absolute; left: 18px; bottom: 18px; z-index: 500;
+      width: min(420px, calc(100% - 36px));
+      background: rgba(15,23,42,.9);
+      border: 1px solid rgba(148,163,184,.18);
+      border-radius: 20px; padding: 14px;
+    }
+    .floating h2 { font-size: 15px; margin-bottom: 8px; }
+    #log {
+      max-height: 95px; overflow-y: auto;
+      color: #94a3b8; font-family: monospace;
+      font-size: 12px; display: grid; gap: 4px;
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; grid-template-rows: 44vh 56vh; }
+      aside { grid-row: 2; border-right: 0; border-top: 1px solid rgba(148,163,184,.16); }
+      .map-wrap { grid-row: 1; }
+      #map { height: 44vh; }
+      .floating { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside>
+      <header>
+        <div class="brand">
+          <div class="brand-left">
+            <div class="logo">📍</div>
+            <div>
+              <h1>LiveTrack</h1>
+              <p class="muted">Real-time approval dashboard</p>
+            </div>
+          </div>
+          <span class="badge" id="conn-badge">Offline</span>
+        </div>
+        <input id="search" type="text" placeholder="Search device-1, Device 1, Harji..." />
+      </header>
+
+      <section class="stats">
+        <div class="stat"><span id="total-count">0</span><small>Total</small></div>
+        <div class="stat"><span id="approved-count">0</span><small>Approved</small></div>
+        <div class="stat"><span id="pending-count">0</span><small>Pending</small></div>
+      </section>
+
+      <section class="device-list" id="device-list">
+        <div class="muted">Waiting for devices...</div>
+      </section>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map"></div>
+      <div class="floating">
+        <h2>Live activity</h2>
+        <div id="log"><div>Waiting for location updates...</div></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io({ transports: ['websocket', 'polling'] });
+
+    const map = L.map('map').setView([20.5937, 78.9629], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    const devices = new Map();
+    const markers = new Map();
+    const trails = new Map();
+    const trailPoints = new Map();
+
+    let selectedDeviceId = '';
+    let followSelected = true;
+
+    const deviceList = document.getElementById('device-list');
+    const searchInput = document.getElementById('search');
+
+    searchInput.addEventListener('input', renderDevices);
+
+    socket.on('connect', () => {
+      document.getElementById('conn-badge').textContent = 'Live';
+      document.getElementById('conn-badge').classList.add('ok');
+      socket.emit('dashboard-join');
+      addLog('Dashboard connected');
+    });
+
+    socket.on('disconnect', () => {
+      document.getElementById('conn-badge').textContent = 'Offline';
+      document.getElementById('conn-badge').classList.remove('ok');
+      addLog('Dashboard disconnected');
+    });
+
+    socket.on('devices-list', list => {
+      list.forEach(device => {
+        devices.set(device.deviceId, { ...(devices.get(device.deviceId) || {}), ...device });
+        if (device.lastLocation) {
+          updateMarker({ ...device.lastLocation, deviceId: device.deviceId, label: device.label, pings: device.pings }, false);
+        }
+      });
+      renderDevices();
+    });
+
+    socket.on('location-update', data => {
+      const old = devices.get(data.deviceId) || {};
+      devices.set(data.deviceId, {
+        ...old,
+        deviceId: data.deviceId,
+        label: data.label,
+        status: 'approved',
+        lastLocation: { lat: data.lat, lng: data.lng, accuracy: data.accuracy, timestamp: data.timestamp },
+        lastSeen: data.timestamp,
+        pings: data.pings
+      });
+
+      updateMarker(data, true);
+      renderDevices();
+      addLog(`${data.label || data.deviceId}: ${data.lat.toFixed(5)}, ${data.lng.toFixed(5)}`);
+    });
+
+    function updateMarker(data, shouldMove) {
+      const latlng = [data.lat, data.lng];
+
+      if (!trailPoints.has(data.deviceId)) trailPoints.set(data.deviceId, []);
+      trailPoints.get(data.deviceId).push(latlng);
+      if (trailPoints.get(data.deviceId).length > 200) trailPoints.get(data.deviceId).shift();
+
+      if (!markers.has(data.deviceId)) {
+        const marker = L.marker(latlng, { icon: createIcon(data.deviceId) }).addTo(map);
+        marker.bindPopup(getPopupHtml(data));
+        marker.on('click', () => {
+          selectedDeviceId = data.deviceId;
+          followSelected = true;
+          renderDevices();
+        });
+
+        markers.set(data.deviceId, marker);
+
+        const line = L.polyline(trailPoints.get(data.deviceId), { weight: 4, opacity: 0.75 }).addTo(map);
+        trails.set(data.deviceId, line);
+      } else {
+        markers.get(data.deviceId).setLatLng(latlng).setPopupContent(getPopupHtml(data));
+        trails.get(data.deviceId).setLatLngs(trailPoints.get(data.deviceId));
+      }
+
+      if (!selectedDeviceId) selectedDeviceId = data.deviceId;
+
+      if (shouldMove && followSelected && selectedDeviceId === data.deviceId) {
+        map.setView(latlng, Math.max(map.getZoom(), 16));
+      }
+    }
+
+    function createIcon(deviceId) {
+      const num = deviceId.replace('device-', '') || '•';
+      return L.divIcon({
+        html: `<div style="width:34px;height:34px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#22c55e,#3b82f6);color:#fff;font-size:12px;font-weight:900;border:3px solid white;box-shadow:0 10px 25px rgba(0,0,0,.35);">${num}</div>`,
+        className: '',
+        iconSize: [34, 34],
+        iconAnchor: [17, 17]
+      });
+    }
+
+    function getPopupHtml(data) {
+      return `
+        <strong>${escapeHtml(data.label || data.deviceId)}</strong><br>
+        ${escapeHtml(data.deviceId)}<br>
+        Accuracy: ${Math.round(data.accuracy || 0)}m<br>
+        Pings: ${data.pings || 0}
+      `;
+    }
+
+    function renderDevices() {
+      const query = searchInput.value.trim().toLowerCase();
+      const all = Array.from(devices.values());
+
+      const filtered = all.filter(device => {
+        const text = `${device.deviceId} ${device.label} ${device.status}`.toLowerCase();
+        return text.includes(query);
+      });
+
+      document.getElementById('total-count').textContent = all.length;
+      document.getElementById('approved-count').textContent = all.filter(d => d.status === 'approved').length;
+      document.getElementById('pending-count').textContent = all.filter(d => d.status === 'pending').length;
+
+      if (!filtered.length) {
+        deviceList.innerHTML = '<div class="muted">No matching devices.</div>';
+        return;
+      }
+
+      deviceList.innerHTML = filtered.map(device => {
+        const selectedClass = device.deviceId === selectedDeviceId ? 'selected' : '';
+        const loc = device.lastLocation;
+        const lastSeen = device.lastSeen ? new Date(device.lastSeen).toLocaleTimeString() : '—';
+
+        return `
+          <article class="device ${selectedClass}" onclick="selectDevice('${device.deviceId}')">
+            <div class="device-head">
+              <div>
+                <div class="device-title">${escapeHtml(device.label || device.deviceId)}</div>
+                <div class="device-id">${escapeHtml(device.deviceId)}</div>
+              </div>
+              <span class="status ${device.status}">${device.status}</span>
+            </div>
+
+            <div class="device-meta">
+              <div>Last seen: ${lastSeen}</div>
+              <div>Pings: ${device.pings || 0}</div>
+              <div>Lat: ${loc ? loc.lat.toFixed(4) : '—'}</div>
+              <div>Lng: ${loc ? loc.lng.toFixed(4) : '—'}</div>
+            </div>
+
+            <div class="actions" onclick="event.stopPropagation()">
+              ${device.status === 'pending' ? `<button class="approve" onclick="approveDevice('${device.deviceId}')">Approve</button>` : ''}
+              ${device.status !== 'rejected' ? `<button class="reject" onclick="rejectDevice('${device.deviceId}')">Reject</button>` : ''}
+              <button class="blue" onclick="loadHistory('${device.deviceId}')">History</button>
+              <button class="ghost" onclick="renameDevice('${device.deviceId}')">Rename</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function selectDevice(deviceId) {
+      selectedDeviceId = deviceId;
+      followSelected = true;
+      const marker = markers.get(deviceId);
+      if (marker) {
+        map.setView(marker.getLatLng(), 16);
+        marker.openPopup();
+      }
+      renderDevices();
+    }
+
+    function approveDevice(deviceId) {
+      socket.emit('approve-device', { deviceId });
+      addLog(`Approved ${deviceId}`);
+    }
+
+    function rejectDevice(deviceId) {
+      socket.emit('reject-device', { deviceId });
+      addLog(`Rejected ${deviceId}`);
+    }
+
+    function renameDevice(deviceId) {
+      const device = devices.get(deviceId);
+      const newName = prompt('Enter new device name:', device?.label || deviceId);
+      if (!newName || !newName.trim()) return;
+      socket.emit('rename-device', { deviceId, label: newName.trim() });
+    }
+
+    async function loadHistory(deviceId) {
+      try {
+        const res = await fetch(`/history/${encodeURIComponent(deviceId)}`);
+        const points = await res.json();
+
+        if (!points.length) return addLog(`No history for ${deviceId}`);
+
+        const latlngs = points.map(p => [p.lat, p.lng]);
+
+        if (trails.has(deviceId)) trails.get(deviceId).setLatLngs(latlngs);
+        else trails.set(deviceId, L.polyline(latlngs, { weight: 4, opacity: 0.75 }).addTo(map));
+
+        trailPoints.set(deviceId, latlngs);
+        map.fitBounds(latlngs);
+        addLog(`Loaded ${points.length} history points for ${deviceId}`);
+      } catch (err) {
+        addLog('History failed: ' + err.message);
+      }
+    }
+
+    function addLog(msg) {
+      const log = document.getElementById('log');
+      const line = document.createElement('div');
+      line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      log.prepend(line);
+      while (log.children.length > 40) log.removeChild(log.lastChild);
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+  </script>
+</body>
+</html>
