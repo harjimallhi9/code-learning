@@ -1,0 +1,34 @@
+.session-view {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  min-height: 0;
+}
+.session-panel {
+  border-right: 1px solid var(--border);
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  overflow-y: auto;
+}
+.session-panel-head { display: flex; justify-content: space-between; align-items: center; }
+.session-countdown { font-size: 12px; color: var(--text-muted); }
+.session-share { padding: 16px; display: grid; gap: 10px; }
+.session-share-label { font-size: 10px; color: var(--text-muted); letter-spacing: 0.1em; }
+.session-actions { display: grid; gap: 10px; margin-top: 8px; }
+.session-map { min-width: 0; }
+.session-error {
+  max-width: 400px;
+  margin: 15vh auto;
+  padding: 28px;
+  text-align: center;
+  display: grid;
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .session-view { grid-template-columns: 1fr; grid-template-rows: 44vh 1fr; }
+  .session-panel { border-right: none; border-top: 1px solid var(--border); order: 2; }
+  .session-map { order: 1; }
+}

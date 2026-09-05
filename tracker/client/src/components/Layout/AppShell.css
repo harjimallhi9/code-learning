@@ -1,0 +1,30 @@
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.app-shell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.app-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.app-shell-logo { color: var(--accent-cyan); font-size: 20px; }
+.app-shell-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+.shell-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); }
+.shell-dot--online { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+.app-shell-main { flex: 1; display: flex; flex-direction: column; }

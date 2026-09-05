@@ -1,0 +1,18 @@
+.share-link {
+  display: grid;
+  gap: 12px;
+}
+.share-link-url {
+  padding: 14px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--accent-cyan);
+  font-size: 13px;
+  word-break: break-all;
+}
+.share-link-actions {
+  display: flex;
+  gap: 10px;
+}
+.share-link-actions button { flex: 1; }

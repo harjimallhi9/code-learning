@@ -1,0 +1,18 @@
+.create-session {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.create-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  display: grid;
+  gap: 16px;
+}
+.create-sub { font-size: 13px; }
+.create-eyebrow { color: var(--accent-green); font-size: 11px; letter-spacing: 0.14em; }
+.field { display: grid; gap: 8px; }
+.create-error { color: var(--accent-red); font-size: 13px; }

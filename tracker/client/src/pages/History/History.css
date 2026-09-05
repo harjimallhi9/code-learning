@@ -1,0 +1,29 @@
+.history-view {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 0;
+}
+.history-panel {
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+.history-error { color: var(--accent-red); font-size: 13px; }
+.history-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.history-stats > div {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+}
+.history-stats span { display: block; font-size: 13px; color: var(--accent-cyan); }
+.history-stats small { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+.history-map { min-width: 0; }

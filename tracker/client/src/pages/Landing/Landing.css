@@ -1,0 +1,35 @@
+.landing {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.landing-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148,163,184,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at center, black, transparent 75%);
+}
+.landing-content {
+  position: relative;
+  max-width: 620px;
+  text-align: center;
+  padding: 40px 24px;
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+}
+.landing-eyebrow { color: var(--accent-cyan); font-size: 11px; letter-spacing: 0.18em; }
+.landing-content h1 { font-size: clamp(32px, 5vw, 52px); line-height: 1.1; }
+.landing-sub { max-width: 440px; font-size: 15px; }
+.landing-cta { margin-top: 8px; padding: 15px 32px; font-size: 15px; }
+.landing-features {
+  display: flex; gap: 10px;
+  color: var(--text-muted); font-size: 11px;
+  letter-spacing: 0.1em; margin-top: 12px;
+}

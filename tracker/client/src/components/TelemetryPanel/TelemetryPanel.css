@@ -1,0 +1,22 @@
+.telemetry-panel {
+  display: grid;
+  gap: 10px;
+}
+.telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.telemetry-row:last-child { border-bottom: none; padding-bottom: 0; }
+.telemetry-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.telemetry-value {
+  font-size: 13px;
+  color: var(--accent-cyan);
+}
