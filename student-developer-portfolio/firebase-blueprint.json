@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "Portfolio": {
+      "title": "Portfolio",
+      "description": "Portfolio content including profile, resume metadata, projects, skills, learning, and certificates.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the developer"
+        },
+        "shortName": {
+          "type": "string",
+          "description": "Short name or initials"
+        },
+        "role": {
+          "type": "string",
+          "description": "Professional title or role"
+        },
+        "headline": {
+          "type": "string",
+          "description": "Hero section headline"
+        },
+        "bio": {
+          "type": "string",
+          "description": "Personal biography"
+        },
+        "currentFocus": {
+          "type": "string",
+          "description": "Current learning or project focus"
+        },
+        "studentStatus": {
+          "type": "string",
+          "description": "Academic status"
+        },
+        "learningMindset": {
+          "type": "string",
+          "description": "Core philosophy"
+        },
+        "location": {
+          "type": "string",
+          "description": "Geographic location"
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email"
+        },
+        "github": {
+          "type": "string",
+          "description": "GitHub profile link"
+        },
+        "linkedin": {
+          "type": "string",
+          "description": "LinkedIn profile link"
+        },
+        "resume": {
+          "type": "string",
+          "description": "Resume URL or base64 data"
+        },
+        "resumeFileName": {
+          "type": "string",
+          "description": "Uploaded resume filename"
+        },
+        "resumeUpdatedAt": {
+          "type": "string",
+          "description": "Timestamp when resume was updated"
+        },
+        "resumeFileSize": {
+          "type": "string",
+          "description": "Formatted file size string"
+        },
+        "hasChunks": {
+          "type": "boolean",
+          "description": "Whether resume is stored in chunks"
+        },
+        "chunkCount": {
+          "type": "number",
+          "description": "Total number of resume chunks"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO string"
+        }
+      },
+      "required": ["name", "email", "role"]
+    },
+    "ResumeChunk": {
+      "title": "ResumeChunk",
+      "description": "Chunked segment of uploaded resume PDF base64 data to support multi-device syncing.",
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "number",
+          "description": "Order index of this chunk"
+        },
+        "data": {
+          "type": "string",
+          "description": "Base64 substring data"
+        }
+      },
+      "required": ["index", "data"]
+    },
+    "AuthSettings": {
+      "title": "AuthSettings",
+      "description": "Settings containing one-way SHA-256 hash of owner passcode.",
+      "type": "object",
+      "properties": {
+        "pinHash": {
+          "type": "string",
+          "description": "SHA-256 hex string of owner passcode"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of passcode update"
+        }
+      },
+      "required": ["pinHash"]
+    }
+  },
+  "firestore": {
+    "/portfolio/{docId}": {
+      "schema": "Portfolio",
+      "description": "Main portfolio data document."
+    },
+    "/portfolio/{docId}/resume_chunks/{chunkId}": {
+      "schema": "ResumeChunk",
+      "description": "Subcollection storing large resume file chunks."
+    },
+    "/settings/{settingId}": {
+      "schema": "AuthSettings",
+      "description": "System authentication settings."
+    }
+  }
+}

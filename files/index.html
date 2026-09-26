@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harji — Full-Stack Developer</title>
+<meta name="description" content="Portfolio of Harji, a freelance full-stack developer building real-time web systems.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%2310161C'/%3E%3Ctext x='50' y='68' font-size='58' fill='%234FD8E8' font-family='monospace' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAV                                                            -->
+<!-- ============================================================ -->
+<header class="nav" id="top">
+  <div class="nav-inner">
+    <a href="#top" class="logo">[H]</a>
+
+    <nav class="nav-links" id="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#certificates">Certificates</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- EDIT: change this text or remove it if you're not open to freelance work right now -->
+    <span class="status">
+      <span class="status-dot" aria-hidden="true"></span>
+      Available for freelance work
+    </span>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============================================================ -->
+  <!-- HERO                                                          -->
+  <!-- ============================================================ -->
+  <section class="hero" id="hero">
+    <div class="radar" aria-hidden="true">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+        <circle class="ring" cx="200" cy="200" r="60"></circle>
+        <circle class="ring" cx="200" cy="200" r="120"></circle>
+        <circle class="ring" cx="200" cy="200" r="180"></circle>
+        <line class="crosshair" x1="200" y1="20" x2="200" y2="380"></line>
+        <line class="crosshair" x1="20" y1="200" x2="380" y2="200"></line>
+        <g class="sweep">
+          <defs>
+            <linearGradient id="sweepGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#4FD8E8" stop-opacity="0"></stop>
+              <stop offset="100%" stop-color="#4FD8E8" stop-opacity="0.35"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M200,200 L200,20 A180,180 0 0,1 356,110 Z" fill="url(#sweepGradient)"></path>
+        </g>
+        <circle class="blip blip-1" cx="262" cy="138" r="4"></circle>
+        <circle class="blip blip-2" cx="146" cy="258" r="3"></circle>
+        <circle class="blip blip-3" cx="300" cy="248" r="3.5"></circle>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <p class="section-heading" style="margin-bottom:16px;">// hello</p>
+      <h1>Harji</h1>
+      <p class="hero-tagline">Full-stack developer building things that move — real-time apps, live dashboards, and the systems behind them.</p>
+      <!-- EDIT: swap in your city if it's not Karnal -->
+      <p class="hero-sub">Based in Karnal, India — open to freelance work.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- ABOUT                                                         -->
+  <!-- ============================================================ -->
+  <section class="section" id="about">
+    <div class="section-grid">
+      <h2 class="section-heading">// about</h2>
+      <!-- EDIT: rewrite this in your own voice, this is a starting draft based on what you've built so far -->
+      <div class="section-body">
+        <p>Harji is a freelance software developer based in Karnal, India, focused on real-time web systems — things that move, update, and respond live. Recent work includes a full-stack GPS location tracker built with Node.js, Express, Socket.io, and Leaflet.js, featuring a dark, mission-control-style dashboard.</p>
+        <p>Outside of client work, Harji creates tech content for a YouTube audience of budget-conscious students and young professionals, and is currently sharpening problem-solving fundamentals through Python.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SKILLS                                                        -->
+  <!-- ============================================================ -->
+  <section class="section" id="skills">
+    <h2 class="section-heading">// skills</h2>
+    <!-- EDIT: add, remove, or regroup these to match what you actually know -->
+    <div class="skills-grid">
+      <div class="panel">
+        <h3 class="panel-title">Frontend</h3>
+        <div class="tag-list">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">React</span>
+          <span class="tag">Vite</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="panel-title">Backend &amp; real-time</h3>
+        <div class="tag-list">
+          <span class="tag">Node.js</span>
+          <span class="tag">Express</span>
+          <span class="tag">Socket.io</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="panel-title">Data &amp; tools</h3>
+        <div class="tag-list">
+          <span class="tag">SQL / SQLite</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Git</span>
+          <span class="tag">VS Code</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="panel-title">Currently learning</h3>
+        <div class="tag-list">
+          <span class="tag tag-muted">Python</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PROJECTS                                                      -->
+  <!-- ============================================================ -->
+  <section class="section" id="projects">
+    <h2 class="section-heading">// projects</h2>
+    <div class="card-grid">
+
+      <!-- PROJECT 1: real project, edit the links below -->
+      <article class="card">
+        <h3 class="card-title">Real-Time GPS Location Tracker</h3>
+        <p class="card-desc">A full-stack location-sharing app: a session owner generates a link, and recipients opt in to share their live position. Built with Socket.io for real-time updates and Leaflet.js for the map layer, with a dark dashboard, color-coded markers, and route trails.</p>
+        <div class="tag-list">
+          <span class="tag">Node.js</span>
+          <span class="tag">Express</span>
+          <span class="tag">Socket.io</span>
+          <span class="tag">Leaflet.js</span>
+          <span class="tag">SQLite</span>
+        </div>
+        <div class="card-links">
+          <!-- EDIT: replace # with your actual repo URL -->
+          <a href="#" class="card-link">View code</a>
+        </div>
+      </article>
+
+      <!-- PROJECT 2: replace with your own project -->
+      <article class="card">
+        <h3 class="card-title">[Project name]</h3>
+        <p class="card-desc">Add a short description: what the project does, the problem it solves, and your role in building it.</p>
+        <div class="tag-list">
+          <span class="tag">[Tech 1]</span>
+          <span class="tag">[Tech 2]</span>
+          <span class="tag">[Tech 3]</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="card-link">View code</a>
+        </div>
+      </article>
+
+      <!-- PROJECT 3: replace with your own project, or delete this whole <article> block -->
+      <article class="card">
+        <h3 class="card-title">[Project name]</h3>
+        <p class="card-desc">Add a short description: what the project does, the problem it solves, and your role in building it.</p>
+        <div class="tag-list">
+          <span class="tag">[Tech 1]</span>
+          <span class="tag">[Tech 2]</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="card-link">View code</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CERTIFICATES                                                  -->
+  <!-- ============================================================ -->
+  <section class="section" id="certificates">
+    <h2 class="section-heading">// certificates</h2>
+    <!-- EDIT: replace each placeholder with your real certificates -->
+    <div class="cert-grid">
+
+      <div class="cert-card">
+        <div class="cert-badge" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"></circle><path d="M13 20l5 5 9-10"></path></svg>
+        </div>
+        <h3 class="cert-title">[Certificate name]</h3>
+        <p class="cert-meta">[Issuing organization]</p>
+        <p class="cert-meta cert-year">[Year]</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-badge" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"></circle><path d="M13 20l5 5 9-10"></path></svg>
+        </div>
+        <h3 class="cert-title">[Certificate name]</h3>
+        <p class="cert-meta">[Issuing organization]</p>
+        <p class="cert-meta cert-year">[Year]</p>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-badge" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"></circle><path d="M13 20l5 5 9-10"></path></svg>
+        </div>
+        <h3 class="cert-title">[Certificate name]</h3>
+        <p class="cert-meta">[Issuing organization]</p>
+        <p class="cert-meta cert-year">[Year]</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTACT                                                       -->
+  <!-- ============================================================ -->
+  <section class="section" id="contact">
+    <h2 class="section-heading">// contact</h2>
+    <p class="contact-sub">Looking to build something real-time, or just want to connect? Reach out below.</p>
+
+    <!-- EDIT: replace every href="#" below with your real profile links -->
+    <div class="contact-grid">
+      <a href="#" class="contact-btn" target="_blank" rel="noopener">
+        <span class="contact-badge">GH</span>
+        <span>GitHub</span>
+      </a>
+      <a href="#" class="contact-btn" target="_blank" rel="noopener">
+        <span class="contact-badge">in</span>
+        <span>LinkedIn</span>
+      </a>
+      <a href="#" class="contact-btn" target="_blank" rel="noopener">
+        <span class="contact-badge">IG</span>
+        <span>Instagram</span>
+      </a>
+      <a href="mailto:you@example.com" class="contact-btn">
+        <span class="contact-badge">@</span>
+        <span>Email</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>© 2026 Harji</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

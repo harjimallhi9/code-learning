@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidPortfolio(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() <= 100 &&
+             data.role is string && data.role.size() <= 100;
+    }
+
+    function isValidResumeChunk(data) {
+      return data.index is number && data.data is string;
+    }
+
+    function isValidAuthSettings(data) {
+      return data.pinHash is string && data.pinHash.size() >= 16 && data.pinHash.size() <= 128;
+    }
+
+    match /portfolio/{docId} {
+      allow read: if true;
+      allow write: if isValidPortfolio(request.resource.data);
+
+      match /resume_chunks/{chunkId} {
+        allow read: if true;
+        allow write: if isValidResumeChunk(request.resource.data);
+      }
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isValidAuthSettings(request.resource.data);
+    }
+  }
+}

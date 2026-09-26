@@ -1,0 +1,62 @@
+%PDF-1.4
+1 0 obj
+<< /Title (Student Developer Resume)
+   /Author (Student Developer)
+>>
+endobj
+2 0 obj
+<< /Type /Catalog
+   /Pages 3 0 R
+>>
+endobj
+3 0 obj
+<< /Type /Pages
+   /Kids [4 0 R]
+   /Count 1
+>>
+endobj
+4 0 obj
+<< /Type /Page
+   /Parent 3 0 R
+   /MediaBox [0 0 612 792]
+   /Contents 5 0 R
+   /Resources << /Font << /F1 6 0 R >> >>
+>>
+endobj
+5 0 obj
+<< /Length 170 >>
+stream
+BT
+/F1 24 Tf
+50 720 Td
+(Student Developer - Resume) Tj
+0 -36 Td
+/F1 12 Tf
+(Replace /public/resume.pdf with your official PDF resume.) Tj
+0 -20 Td
+(Projects: Real-Time GPS Tracker, Web Apps & APIs) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Font
+   /Subtype /Type1
+   /BaseFont /Helvetica
+>>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000084 00000 n 
+0000000135 00000 n 
+0000000194 00000 n 
+0000000318 00000 n 
+0000000539 00000 n 
+trailer
+<< /Size 7
+   /Root 2 0 R
+>>
+startxref
+612
+%%EOF
